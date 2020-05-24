@@ -33,7 +33,7 @@ Python script run.py contains a web app that:
 
 - Loads data from the trained model
 - Allows to classify new messages with the trained model
-- contains several visualisations from the training data
+- contains several visualisations from the training data 
 
 ## Instructions
 The python script can be executed within the terminal with the following parameters:
@@ -50,3 +50,12 @@ The python script can be executed within the terminal with the following paramet
 
 3. Go to http://0.0.0.0:3001/
 run.py
+
+## Further remarks
+
+Within the development process several different classification algorithms were tested with various parameter settings (RandomForestClassifier, MLPRegressor, LinearSVC). Further characteristics like word count character count were added but without any increase of model performance. It turned out that LinearSVC by far provides the best F1 scores out of all models. Only one hyperparameter is used in the grid search here due to performance resasons and none of them lead to any improvement of the model performance.
+
+The model provides weak performance for some of the categories with very few training data - here more training data is required. In order to directly find the categories which need to be improved the last visualisation was added.
+
+The visualisation shows the share of category tags in the training data set and the corresponsing precision score. High category shares and low precision score could show poor model performance which ould be enhanced by further characteristics etc. whereas  for low category shares more training data should improve the results.
+
