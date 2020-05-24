@@ -20,6 +20,10 @@ from sklearn.metrics import classification_report, f1_score, recall_score, preci
 from sklearn.base import BaseEstimator, TransformerMixin
 
 def load_data(database_filepath):
+    ''' 
+    INPUT: filepath to category/message data in the sql database
+    OUTPUT: X = text messages (features), Y = dataframe with 36 category classifications, category_names = column names for Y
+    '''
     # load data from database
     engine = create_engine('sqlite:///'+database_filepath)
     df = pd.read_sql_table('DisasterResponseTable', con=engine)
@@ -32,6 +36,10 @@ def load_data(database_filepath):
     return X, Y, category_names
 
 def tokenize(text):
+    ''' 
+    INPUT: message text
+    OUTPUT: tokenized and lemmatized text in lower cases in list format
+    '''
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -44,6 +52,10 @@ def tokenize(text):
 
 
 def build_model():
+    ''' 
+    INPUT: none
+    OUTPUT: model with pipeline and grid search parameters
+    '''
     # setup pipeline with TFIDF and MultiOutput LinearSVC()
     pipeline = Pipeline([
             ('vect', CountVectorizer(tokenizer=tokenize)),
@@ -59,8 +71,13 @@ def build_model():
     
     return model
 
+
 precision_score_categories = []
 def evaluate_model(model, X_test, Y_test, category_names):
+    ''' 
+    INPUT: model = grid search model, X_test, Y_test = test dataset for features and labels, category_names = column names for categories 
+    OUTPUT: prints the classification report for all 36 categories and saves precision score data for visualisation in list format
+    '''
     # predict on test data
     Y_pred = pd.DataFrame(model.predict(X_test), columns=category_names)
     # print classification report for each category
@@ -75,6 +92,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
         
 def save_model(model, model_filepath):
+    ''' 
+    INPUT: grid search model and filepath of saved model
+    OUTPUT: none
+    '''
     # Save the model as a pickle in a file 
     joblib.dump(model, model_filepath) 
 

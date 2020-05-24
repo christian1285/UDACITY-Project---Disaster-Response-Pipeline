@@ -4,6 +4,10 @@ import re
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    ''' 
+    INPUT: message and category filepath
+    OUTPUT: merged dataframe
+    '''
     # load messages and categories dataset 
     messages = pd.read_csv(messages_filepath)   
     categories = pd.read_csv(categories_filepath)
@@ -14,6 +18,10 @@ def load_data(messages_filepath, categories_filepath):
     return df
 
 def clean_data(df):
+    ''' 
+    INPUT: merged dataframe with messages and categories data
+    OUTPUT: cleaned dataframe with individual columns for each category
+    '''
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(';', expand=True)
     
@@ -46,6 +54,10 @@ def clean_data(df):
     return df
 
 def save_data(df, database_filepath):
+     ''' 
+    INPUT: cleaned dataframe
+    OUTPUT: none
+    '''
     # save data to sql database
     engine = create_engine('sqlite:///'+database_filepath)
     df.to_sql('DisasterResponseTable', engine, index=False) 
